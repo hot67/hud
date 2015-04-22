@@ -4,6 +4,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    a.setOrganizationName("hotteam67");
+    a.setOrganizationDomain("org");
+    a.setApplicationName("HUD");
+
     HotDashboard w;
     w.show();
 
