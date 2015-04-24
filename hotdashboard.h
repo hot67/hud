@@ -18,6 +18,7 @@ public:
 
 private slots:
     void about();
+    void clear();
 
 private:
     void createActions();
@@ -27,6 +28,7 @@ private:
     Ui::HotDashboard *ui;
 
     QAction* act_quit;
+    QAction* act_clear;
     QAction* act_about;
     QAction* act_aboutQt;
 

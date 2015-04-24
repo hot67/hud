@@ -23,12 +23,21 @@ void HotDashboard::about()
                                                "to improve robot data reporting and organization, in tandem with the HOT RobotUtils project."));
 }
 
+void HotDashboard::clear()
+{
+
+}
+
 void HotDashboard::createActions()
 {
     act_quit = new QAction(tr("&Quit"),this);
     act_quit->setShortcuts(QKeySequence::Quit);
     act_quit->setStatusTip(tr("Close the HUD."));
     connect(act_quit, SIGNAL(triggered()), this, SLOT(close()));
+
+    act_clear = new QAction(tr("&Clear"), this);
+    act_clear->setStatusTip(tr("Clear current HUD data."));
+    connect(act_clear, SIGNAL(triggered()), this, SLOT(about()));
 
     act_about = new QAction(tr("&About"),this);
     act_about->setStatusTip("About the HUD.");
@@ -42,6 +51,7 @@ void HotDashboard::createActions()
 void HotDashboard::createMenus()
 {
     menu_file = menuBar()->addMenu(tr("&File"));
+    menu_file->addAction(act_clear);
     menu_file->addAction(act_quit);
 
     menu_help = menuBar()->addMenu(tr("&Help"));
