@@ -2,6 +2,8 @@
 #define ROBOTVIEWER_H
 
 #include <QWidget>
+#include <QMdiArea>
+#include <QLayout>
 
 class RobotViewer : public QWidget
 {
@@ -13,6 +15,10 @@ public:
 signals:
 
 public slots:
+
+private:
+    QHBoxLayout* l_mainLayout;
+    QMdiArea* w_dataViewArea;
 };
 
 #endif // ROBOTVIEWER_H

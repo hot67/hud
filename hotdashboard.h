@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include "robotviewer.h"
 
 namespace Ui {
 class HotDashboard;
@@ -25,6 +26,8 @@ private:
     void createStatusBar();
 
     Ui::HotDashboard *ui;
+
+    RobotViewer* w_viewer;
 
     QAction* act_quit;
     QAction* act_about;

@@ -7,6 +7,10 @@ HotDashboard::HotDashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    w_viewer = new RobotViewer (this);
+
+    setCentralWidget(w_viewer);
+
     createActions();
     createMenus();
     createStatusBar();
