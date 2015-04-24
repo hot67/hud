@@ -19,6 +19,7 @@ public:
 
 private slots:
     void about();
+    void clear();
 
 private:
     void createActions();
@@ -30,6 +31,7 @@ private:
     RobotViewer* w_viewer;
 
     QAction* act_quit;
+    QAction* act_clear;
     QAction* act_about;
     QAction* act_aboutQt;
 
