@@ -20,6 +20,6 @@ SOURCES += main.cpp\
 
 HEADERS  += hotdashboard.h\
          robotviewer.h \
-         robotnetwork.cpp
+         robotnetwork.h
 
 FORMS    += hotdashboard.ui

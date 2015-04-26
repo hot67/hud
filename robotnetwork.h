@@ -1,9 +1,11 @@
 #ifndef ROBOTNETWORK_H
 #define ROBOTNETWORK_H
 
+#include <QObject>
 
-class robotNetwork
+class robotNetwork: public QObject
 {
+    Q_OBJECT
 public:
     robotNetwork();
     ~robotNetwork();
