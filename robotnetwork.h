@@ -10,6 +10,8 @@ public:
     robotNetwork();
     ~robotNetwork();
 
+public slots:
+
 private:
     void IP();
 };
