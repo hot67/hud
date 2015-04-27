@@ -16,10 +16,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         hotdashboard.cpp \
         robotviewer.cpp \
-        robotnetwork.cpp
+    robotnetwork.cpp
 
 HEADERS  += hotdashboard.h\
          robotviewer.h \
-         robotnetwork.h
+    robotnetwork.h
 
 FORMS    += hotdashboard.ui

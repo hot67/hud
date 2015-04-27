@@ -1,19 +1,25 @@
 #ifndef ROBOTNETWORK_H
 #define ROBOTNETWORK_H
 
+#include <QtNetwork>
+#include <QMainWindow>
 #include <QObject>
+#include <QWidget>
 
-class robotNetwork: public QObject
+class robotnetwork : public QObject
 {
     Q_OBJECT
 public:
-    robotNetwork();
-    ~robotNetwork();
+    explicit robotnetwork(QObject *parent = 0);
+    ~robotnetwork();
+
+signals:
 
 public slots:
+    void newConnection();
 
 private:
-    void IP();
+    QTcpServer* robotServer;
 };
 
 #endif // ROBOTNETWORK_H
