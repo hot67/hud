@@ -55,7 +55,7 @@ void HotDashboard::createActions()
 
     act_clear = new QAction(tr("&Clear"), this);
     act_clear->setStatusTip(tr("Clear current HUD data."));
-    connect(act_clear, SIGNAL(triggered()), this, SLOT(about()));
+    connect(act_clear, SIGNAL(triggered()), this, SLOT(clear()));
 
     act_about = new QAction(tr("&About"),this);
     act_about->setStatusTip("About the HUD.");
