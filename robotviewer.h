@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMdiArea>
 #include <QLayout>
+#include "robotnetwork.h"
 
 class RobotViewer : public QWidget
 {

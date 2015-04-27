@@ -6,20 +6,29 @@
 #include <QObject>
 #include <QWidget>
 
-class robotnetwork : public QObject
+class RobotNetwork : public QObject
 {
     Q_OBJECT
 public:
-    explicit robotnetwork(QObject *parent = 0);
-    ~robotnetwork();
+    explicit RobotNetwork(QObject *parent = 0, int team = 0);
+    ~RobotNetwork();
 
 signals:
+    void connected();
+    void connectionError(QString errorString);
 
 public slots:
-    void newConnection();
+
+private slots:
+    void setupSockets(QHostInfo info);
+    void connectionSuccessful();
+    void connectionUnsuccessful(QAbstractSocket::SocketError error);
 
 private:
-    QTcpServer* robotServer;
+    QUdpSocket* m_robotListener;
+    QUdpSocket* m_robotWriter;
+
+    QString m_address;
 };
 
 #endif // ROBOTNETWORK_H

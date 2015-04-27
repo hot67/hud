@@ -7,6 +7,9 @@ HotDashboard::HotDashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    readSettings();
+
+    m_networkManager = new RobotNetwork (this, m_team);
     w_viewer = new RobotViewer (this);
 
     setCentralWidget(w_viewer);
@@ -14,6 +17,7 @@ HotDashboard::HotDashboard(QWidget *parent) :
     createActions();
     createMenus();
     createStatusBar();
+    setupNetworkSlots();
 }
 
 HotDashboard::~HotDashboard()
@@ -30,6 +34,16 @@ void HotDashboard::about()
 void HotDashboard::clear()
 {
 
+}
+
+void HotDashboard::updateStatusMessage(QString message)
+{
+    statusBar()->showMessage(message);
+}
+
+void HotDashboard::robotConnected()
+{
+    statusBar()->showMessage("Robot connected, team #"+QString::number(m_team));
 }
 
 void HotDashboard::createActions()
@@ -65,5 +79,27 @@ void HotDashboard::createMenus()
 
 void HotDashboard::createStatusBar()
 {
-    statusBar()->showMessage(tr("Robot not found."));
+    statusBar()->showMessage(tr("No robot connected."));
+}
+
+void HotDashboard::readSettings()
+{
+    QSettings settings;
+
+    m_team = settings.value("teamNumber").toInt();
+}
+
+void HotDashboard::saveSettings()
+{
+    QSettings settings;
+
+    settings.setValue("teamNumber",m_team);
+
+    settings.sync();
+}
+
+void HotDashboard::setupNetworkSlots()
+{
+    connect(m_networkManager,SIGNAL(connected()),this,SLOT(robotConnected()));
+    connect(m_networkManager,SIGNAL(connectionError(QString)),this,SLOT(updateStatusMessage(QString)));
 }
