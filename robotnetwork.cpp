@@ -2,17 +2,16 @@
 
 RobotNetwork::RobotNetwork(QObject *parent, int team) : QObject(parent)
 {
-    m_address = QString("roboRIO-") + QString::number(team) + QString(".local");
+    m_rioHost = QString("roboRIO-") + QString::number(team) + QString(".local");
+    m_team = team;
 
-    m_robotListener = new QUdpSocket(this);
-    m_robotWriter = new QUdpSocket(this);
+    m_connKey = 0;
 
-    connect(m_robotListener,SIGNAL(connected()),this,SLOT(connectionSuccessful()));
-    connect(m_robotWriter,SIGNAL(connected()),this,SLOT(connectionSuccessful()));
-    connect(m_robotListener,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(connectionUnsuccessful(QAbstractSocket::SocketError)));
-    connect(m_robotWriter,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(connectionUnsuccessful(QAbstractSocket::SocketError)));
+    m_robotComs = new QUdpSocket(this);
+    m_robotComs->bind(QHostAddress::LocalHost,HOST_PORT);
 
-    QHostInfo::lookupHost(m_address,this,SLOT(setupSockets(QHostInfo)));
+    connect(m_robotComs,SIGNAL(readyRead(),this,SLOT(processDatagram()));
+    connect(m_robotComs,SIGNAL(connected()),this,SLOT(connectionSuccessful()));
 }
 
 RobotNetwork::~RobotNetwork()
@@ -20,9 +19,37 @@ RobotNetwork::~RobotNetwork()
 
 }
 
+void RobotNetwork::writeMessage(QString msg)
+{
+    m_robotComs->writeDatagram(msg.toStdString().c_str(),msg.size(),m_rioAddress,ROBOT_PORT);
+}
+
+void RobotNetwork::connect()
+{
+    if (m_rioHost != QHostAddress::Null)
+        sendConnectRequest();
+    else
+        QHostInfo::lookupHost(m_rioHost,this,SLOT(setConnection(QHostInfo)));
+}
+
+void RobotNetwork::processDatagram()
+{
+    QByteArray data;
+    QHostAddress senderAddress;
+
+    data.resize(m_robotComs->pendingDatagramSize());
+
+    m_robotComs->readDatagram(data.data(),data.size(),&senderAddress);
+
+    if (senderAddress == m_rioAddress)
+    {
+
+    }
+}
+
 void RobotNetwork::connectionSuccessful()
 {
-    emit connected();
+    emit listening();
 }
 
 void RobotNetwork::connectionUnsuccessful(QAbstractSocket::SocketError error)
@@ -52,17 +79,28 @@ void RobotNetwork::connectionUnsuccessful(QAbstractSocket::SocketError error)
     }
 }
 
-void RobotNetwork::setupSockets(QHostInfo info)
+void RobotNetwork::setConnection(QHostInfo info)
 {
-    QHostAddress roborio;
-
     if (info.error() == QHostInfo::NoError)
     {
-        roborio = info.addresses().first();
+        m_rioAddress = info.addresses().first();
 
-        m_robotWriter->bind(roborio,1130);
-        m_robotListener->bind(roborio,1140);
+        sendConnectRequest();
     }
     else
         emit connectionError(info.errorString());
+}
+
+void RobotNetwork::sendConnectRequest()
+{
+    QString datagram;
+
+    datagram = "HUD-"+QString::number(m_team)+':';
+
+    if (m_connKey == 0)
+        m_connKey = qrand() % ((0xffff - 0x1000) + 1) + 0x1000;
+
+    datagram.append(QString::number(m_connKey,16));
+
+    writeMessage(datagram);
 }

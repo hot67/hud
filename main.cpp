@@ -1,10 +1,12 @@
 #include "hotdashboard.h"
-#include "robotnetwork.h"
 #include <QApplication>
+#include <ctime>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    qsrand(time(NULL));
 
     a.setOrganizationName("hotteam67");
     a.setOrganizationDomain("org");
